@@ -1,0 +1,46 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Lead",
+  "enabled": 1,
+  "modified": "2025-07-07 12:28:10.812871",
+  "module": "EnerTechCRM",
+  "name": "Auto-Tagging in temp",
+  "script": "frappe.ui.form.on('Lead', {\n    refresh(frm) {\n        // Example rule: based on custom delivery or intent\n        const urgency = frm.doc.expected_delivery;  // create this field if not available\n        const intent = frm.doc.intent;              // another custom field\n\n        let temp = \"Cold\";\n\n        if (urgency && urgency <= 7) {\n            temp = \"Hot\";\n        } else if (urgency && urgency <= 15) {\n            temp = \"Warm\";\n        }\n\n        frm.set_value(\"lead_temperature\", temp);\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Lead",
+  "enabled": 1,
+  "modified": "2025-07-07 12:29:15.050508",
+  "module": "EnerTechCRM",
+  "name": "Lead Temperature Button",
+  "script": "frappe.listview_settings['Lead'] = {\n    filters: [[\"lead_temperature\", \"!=\", \"\"]],  // Show leads where temperature is set\n\n    onload: function (listview) {\n        listview.page.add_dropdown(__('Filter by Temperature'), [\n            {\n                label: '🔥 Hot',\n                action: function () {\n                    listview.filter_area.clear();\n                    listview.filter_area.add([['Lead', 'lead_temperature', '=', 'Hot']]);\n                }\n            },\n            {\n                label: '🌤️ Warm',\n                action: function () {\n                    listview.filter_area.clear();\n                    listview.filter_area.add([['Lead', 'lead_temperature', '=', 'Warm']]);\n                }\n            },\n            {\n                label: '❄️ Cold',\n                action: function () {\n                    listview.filter_area.clear();\n                    listview.filter_area.add([['Lead', 'lead_temperature', '=', 'Cold']]);\n                }\n            },\n            {\n                label: '🧹 Clear Filter',\n                action: function () {\n                    listview.filter_area.clear();\n                }\n            }\n        ]);\n    }\n};\n",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Lead",
+  "enabled": 1,
+  "modified": "2025-07-07 12:29:56.307757",
+  "module": "EnerTechCRM",
+  "name": "Filter by temp",
+  "script": "frappe.listview_settings['Lead'] = {\n    onload: function (listview) {\n        listview.page.add_dropdown(__('Filter by Temperature'), [\n            {\n                label: '🔥 Hot',\n                action: function () {\n                    listview.filter_area.clear();\n                    listview.filter_area.add([\n                        ['Lead', 'lead_temperature', '=', 'Hot']\n                    ]);\n                }\n            },\n            {\n                label: '🌤️ Warm',\n                action: function () {\n                    listview.filter_area.clear();\n                    listview.filter_area.add([\n                        ['Lead', 'lead_temperature', '=', 'Warm']\n                    ]);\n                }\n            },\n            {\n                label: '❄️ Cold',\n                action: function () {\n                    listview.filter_area.clear();\n                    listview.filter_area.add([\n                        ['Lead', 'lead_temperature', '=', 'Cold']\n                    ]);\n                }\n            },\n            {\n                label: '🧹 Clear Filter',\n                action: function () {\n                    listview.filter_area.clear();\n                }\n            }\n        ]);\n    }\n};\n",
+  "view": "List"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Lead",
+  "enabled": 1,
+  "modified": "2025-07-07 12:31:34.394335",
+  "module": "EnerTechCRM",
+  "name": "Lead List Color",
+  "script": "\nfrappe.listview_settings['Lead'] = {\n    get_indicator: function (doc) {\n        if (doc.lead_temperature === \"Hot\") {\n            return [__(\"Hot\"), \"red\", \"lead_temperature,=,Hot\"];\n        } else if (doc.lead_temperature === \"Warm\") {\n            return [__(\"Warm\"), \"orange\", \"lead_temperature,=,Warm\"];\n        } else if (doc.lead_temperature === \"Cold\") {\n            return [__(\"Cold\"), \"blue\", \"lead_temperature,=,Cold\"];\n        }\n    }\n};\n",
+  "view": "List"
+ }
+]

@@ -5,6 +5,9 @@ app_description = "custom CRM for the EnerTech UPS"
 app_email = "nileshp01@brainmine.ai"
 app_license = "mit"
 
+fixtures = ["Client Script", "Custom Field"]
+
+
 # Apps
 # ------------------
 
